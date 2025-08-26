@@ -2,27 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Guessing Game & Calculator</title>
+    <title>Guessing Game</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <style>
-      .calc-display {
-        font-size: 1.5rem;
-        text-align: right;
-      }
-      .btn-lg {
-        min-width: 80px;
-        margin: 3px;
-      }
-    </style>
   </head>
   <body class="bg-light">
     <div
-      class="container d-flex flex-column justify-content-center align-items-center min-vh-100 gap-5"
+      class="contaginer d-flex flex-column justify-content-center align-items-center min-vh-100"
     >
-      <!-- Guessing Game -->
       <div class="card shadow p-4" style="width: 550px">
         <h3 class="text-center mb-3">Guessing Game</h3>
         <p>
@@ -48,144 +37,9 @@
           Reset Game
         </button>
       </div>
-
-      <!-- Scientific Calculator -->
-      <div class="card shadow p-4" style="width: 450px">
-        <h3 class="text-center mb-3">Calculator</h3>
-
-        <!-- Displays -->
-        <div class="mb-3">
-          <input
-            type="text"
-            id="calcExpression"
-            class="form-control text-end mb-1"
-            readonly
-          />
-          <input
-            type="text"
-            id="calcDisplay"
-            class="form-control calc-display"
-            readonly
-          />
-        </div>
-
-        <!-- Number Buttons -->
-        <div class="d-flex flex-wrap justify-content-center">
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(6)">
-            6
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(7)">
-            7
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(8)">
-            8
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(9)">
-            9
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(2)">
-            2
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(3)">
-            3
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(4)">
-            4
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(5)">
-            5
-          </button>
-          <button class="btn btn-warning btn-lg" onclick="chooseOperation('+')">
-            +
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(0)">
-            0
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber(1)">
-            1
-          </button>
-          <button class="btn btn-warning btn-lg" onclick="chooseOperation('-')">
-            −
-          </button>
-          <button class="btn btn-warning btn-lg" onclick="chooseOperation('*')">
-            ×
-          </button>
-          <button class="btn btn-primary btn-lg" onclick="appendNumber('.')">
-            .
-          </button>
-          <button class="btn btn-warning btn-lg" onclick="chooseOperation('/')">
-            ÷
-          </button>
-        </div>
-
-        <!-- Scientific Buttons -->
-        <div class="d-flex justify-content-between mt-3">
-          <button
-            class="btn btn-info btn-lg"
-            onclick="scientificOperation('sqrt')"
-          >
-            √
-          </button>
-          <button
-            class="btn btn-info btn-lg"
-            onclick="scientificOperation('square')"
-          >
-            x²
-          </button>
-          <button
-            class="btn btn-info btn-lg"
-            onclick="scientificOperation('pow')"
-          >
-            xʸ
-          </button>
-          <button
-            class="btn btn-info btn-lg"
-            onclick="scientificOperation('mod')"
-          >
-            %
-          </button>
-        </div>
-        <div class="d-flex justify-content-between mt-0.5">
-          <button
-            class="btn btn-info btn-lg"
-            onclick="scientificOperation('sin')"
-          >
-            sin
-          </button>
-          <button
-            class="btn btn-info btn-lg"
-            onclick="scientificOperation('cos')"
-          >
-            cos
-          </button>
-          <button
-            class="btn btn-info btn-lg"
-            onclick="scientificOperation('tan')"
-          >
-            tan
-          </button>
-          <button
-            class="btn btn-info btn-lg"
-            onclick="scientificOperation('log')"
-          >
-            log
-          </button>
-        </div>
-        <div class="d-grid gap-2 mt-3">
-          <button class="btn btn-danger btn-lg" onclick="clearCalculator()">
-            C
-          </button>
-        </div>
-        <div class="d-grid gap-2 mt-3">
-          <button class="btn btn-success btn-lg" onclick="computeResult()">
-            =
-          </button>
-        </div>
-      </div>
     </div>
 
     <script>
-      /* ===================== GUESSING GAME ===================== */
       let secretNumber, attemptsLeft;
 
       function resetGame() {
@@ -195,6 +49,7 @@
         document.getElementById("attempts").innerText = attemptsLeft;
         document.getElementById("guessInput").value = "";
       }
+
       function checkGuess() {
         let guess = parseInt(document.getElementById("guessInput").value);
         if (isNaN(guess) || guess < 1 || guess > 10) {
@@ -219,140 +74,8 @@
             guess > secretNumber ? "📉 Too high!" : "📈 Too low!";
         }
       }
+
       resetGame();
-
-      /* ===================== CALCULATOR ===================== */
-      let currentInput = "";
-      let currentOperation = null;
-      let firstOperand = "";
-
-      function updateDisplay() {
-        document.getElementById("calcDisplay").value = currentInput;
-      }
-
-      function appendNumber(number) {
-        currentInput += number;
-        updateDisplay();
-      }
-
-      function chooseOperation(operation) {
-        if (currentInput === "") return;
-        if (firstOperand !== "") computeResult();
-
-        firstOperand = currentInput;
-        currentOperation = operation;
-        currentInput = "";
-
-        document.getElementById("calcExpression").value =
-          firstOperand + " " + operation;
-        updateDisplay();
-      }
-
-      function computeResult() {
-        if (
-          firstOperand === "" ||
-          currentInput === "" ||
-          currentOperation === null
-        )
-          return;
-
-        let result;
-        const prev = parseFloat(firstOperand);
-        const current = parseFloat(currentInput);
-
-        switch (currentOperation) {
-          case "+":
-            result = prev + current;
-            break;
-          case "-":
-            result = prev - current;
-            break;
-          case "*":
-            result = prev * current;
-            break;
-          case "/":
-            result = current !== 0 ? prev / current : "Error";
-            break;
-          case "^":
-            result = Math.pow(prev, current);
-            break;
-          case "%":
-            result = prev % current;
-            break;
-        }
-
-        document.getElementById(
-          "calcExpression"
-        ).value = `${prev} ${currentOperation} ${current}`;
-        currentInput = result.toString();
-        firstOperand = "";
-        currentOperation = null;
-        updateDisplay();
-      }
-
-      function scientificOperation(op) {
-        if (currentInput === "") return;
-        const num = parseFloat(currentInput);
-        let result;
-
-        switch (op) {
-          case "sqrt":
-            result = Math.sqrt(num);
-            document.getElementById("calcExpression").value = `√(${num})`;
-            break;
-          case "square":
-            result = Math.pow(num, 2);
-            document.getElementById("calcExpression").value = `${num}²`;
-            break;
-          case "pow":
-            firstOperand = currentInput;
-            currentOperation = "^";
-            currentInput = "";
-            document.getElementById(
-              "calcExpression"
-            ).value = `${firstOperand} ^`;
-            updateDisplay();
-            return;
-          case "mod":
-            firstOperand = currentInput;
-            currentOperation = "%";
-            currentInput = "";
-            document.getElementById(
-              "calcExpression"
-            ).value = `${firstOperand} %`;
-            updateDisplay();
-            return;
-          case "sin":
-            result = Math.sin((num * Math.PI) / 180);
-            document.getElementById("calcExpression").value = `sin(${num})`;
-            break;
-          case "cos":
-            result = Math.cos((num * Math.PI) / 180);
-            document.getElementById("calcExpression").value = `cos(${num})`;
-            break;
-          case "tan":
-            result = Math.tan((num * Math.PI) / 180);
-            document.getElementById("calcExpression").value = `tan(${num})`;
-            break;
-          case "log":
-            result = Math.log10(num);
-            document.getElementById("calcExpression").value = `log(${num})`;
-            break;
-          default:
-            return;
-        }
-
-        currentInput = result.toString();
-        updateDisplay();
-      }
-
-      function clearCalculator() {
-        currentInput = "";
-        currentOperation = null;
-        firstOperand = "";
-        document.getElementById("calcExpression").value = "";
-        updateDisplay();
-      }
     </script>
   </body>
 </html>
